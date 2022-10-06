@@ -9,11 +9,13 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Dialect } from 'sequelize';
+import { User } from './users/entities/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     SequelizeModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule, UsersModule],
       useFactory: (configService: ConfigService) => ({
         dialect: 'postgres' as Dialect,
         host: process.env.DATABASE_HOST,
@@ -21,7 +23,8 @@ import { Dialect } from 'sequelize';
         username: process.env.DATABASE_USERNAME,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
-        logging: false,
+        models: [User],
+
         // dialect: configService.get('database.dialect'),
         // host: configService.get('database.host'),
         // port: +configService.get('database.port'),
@@ -29,6 +32,7 @@ import { Dialect } from 'sequelize';
         // password: configService.get('database.password'),
         // database: configService.get('database.database'),
         autoLoadModels: true,
+        synchronize: false,
       }),
       inject: [ConfigService],
     }),
@@ -37,6 +41,7 @@ import { Dialect } from 'sequelize';
       driver: ApolloDriver,
       useClass: GqlConfigService,
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppResolver],

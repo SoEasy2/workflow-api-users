@@ -3,43 +3,52 @@ services:
   workflow-api-users:
     image: node:16
     ports:
-      - "3000:3000"
+      - "4000:4000"
     working_dir: /src
     networks:
       - app-network
-    depends_on:
-        - workflow-db-users
     environment:
-      HOST: 0.0.0.0
-    command: bash -c "npm install -f && npm run start:dev"
+      DATABASE_HOST: workflow-db-users
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: admin
+      DATABASE_PASSWORD: root
+      DATABASE_NAME: users
+    command: bash -c "npm install -f && npm start"
+    depends_on:
+      - workflow-db-users
     volumes:
-      - "./:/src"
+      - ":/src"
       - "/src/node_modules"
 
   workflow-db-users:
-    container_name: workflow-db-users
-    image: postgres:9.5
-    restart: always
+    image: kartoza/postgis:14-3.1
     volumes:
-      - ./_data/postgres:/var/lib/postgresql/data
-      - ./_postgres/scripts/create_test_db.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+      - ../workflow-db-users:/var/lib/postgresql
+      - ../workflow-db-users_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
-    expose:
-      - 5432
+      - 25432:5432
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASS=root
+      - POSTGRES_DB=users
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
+    networks:
+      - app-network
 
   workflow-pgadmin-users:
-    container_name: workflow-pgadmin-users
-    image: dpage/pgadmin4:5.5
-    restart: always
+    image: dpage/pgadmin4
+    logging:
+      driver: none
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: secret
-      PGADMIN_LISTEN_PORT: 80
-    ports:
-      - "8080:80"
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
-      - ./pgadmin:/var/lib/pgadmin/web/pgadmin4
+      - ../workflow-pgadmin-users:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - app-network
 networks:
   app-network:
     driver: bridge
