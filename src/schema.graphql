@@ -14,15 +14,36 @@ input CreateUserInput {
 }
 
 type Mutation {
-  createUser(createUserData: CreateUserInput!): User!
+  createUser(createUserInput: CreateUserInput!): User!
+  deleteUser(id: String!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 type Query {
+  getAllUsers: [User!]!
+  getOneUser(id: String!): User!
   hello(name: String!): String!
   helloWorld: String!
 }
 
+input UpdateUserInput {
+  """Example field (test@gmail.com)"""
+  email: String!
+
+  """Example field (test@gmail.com)"""
+  id: String!
+
+  """Example field (test)"""
+  password: String
+
+  """Example field (+33333333)"""
+  phone: String!
+}
+
 type User {
+  """ISO date string"""
+  createdAt: String
+
   """Example field (email)"""
   email: String!
 
@@ -34,4 +55,7 @@ type User {
 
   """Example field (phone)"""
   phone: String!
+
+  """ISO date"""
+  updatedAt: String
 }

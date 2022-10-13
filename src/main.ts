@@ -1,11 +1,25 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+
 //import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  console.log('RPOCESS ENV', process.env);
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.KAFKA,
+      options: {
+        client: {
+          brokers: ['localhost:9092'],
+        },
+        consumer: {
+          groupId: 'users-consumer',
+        },
+      },
+    },
+  );
 
-  await app.listen(4000);
+  app.listen();
 }
 bootstrap();

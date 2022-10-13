@@ -6,24 +6,28 @@ import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class UsersService {
-  constructor( @InjectModel(User) private readonly usersRepository: typeof User) {}
+  constructor(
+    @InjectModel(User) private readonly usersRepository: typeof User,
+  ) {}
   create(createUserInput: CreateUserInput): Promise<User> {
     return this.usersRepository.create(createUserInput);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  findAll(): Promise<User[]> {
+    return this.usersRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: string): Promise<User> {
+    return this.usersRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
+    await this.usersRepository.update(updateUserInput, { where: { id } });
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string): Promise<string> {
+    await this.usersRepository.destroy({ where: { id } });
+    return id;
   }
 }

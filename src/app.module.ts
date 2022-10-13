@@ -32,7 +32,8 @@ import { UsersModule } from './users/users.module';
         // password: configService.get('database.password'),
         // database: configService.get('database.database'),
         autoLoadModels: true,
-        synchronize: false,
+        synchronize: true,
+        logging: true
       }),
       inject: [ConfigService],
     }),
