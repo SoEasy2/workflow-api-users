@@ -3,42 +3,53 @@ import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+import { EventPattern, MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 import { Controller } from '@nestjs/common';
+import { TOPIC_USER_CREATE, TOPIC_USER_CREATE_REPLY } from '../common/constants';
 
-interface IKafkaMessage<T> {
-  topic: string;
-  partition: number;
-  timestamp: string;
-  size: number;
-  attributes: number;
-  offset: string;
-  key: any;
-  value: T;
-  headers: Record<string, any>;
-}
-@Resolver()
-@Controller()
+
+@Resolver('User')
+@Controller('user')
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @MessagePattern('add.new.post')
-  killDragon(@Payload() message): string {
-    console.log(message, 'ASDASDASDASDASDASDASD');
-    return 'asd';
+  @Mutation(() => String, { name: 'create' })
+  @MessagePattern('user.create')
+  async createUser(
+      @Payload() message,
+      // @Args('createUserInput') createUserInput: CreateUserInput,
+  ) {
+   try{
+     console.log('THIS IS THE CREATE USER INPUT', message);
+     // console.log('THIS IS THE CREATE USER INPUT', createUserInput);
+     return "ASDASDASDSAD";
+     //return await this.usersService.create(createUserInput);
+   }catch (e) {
+     throw new RpcException(e.message);
+   }
+  }
+  @EventPattern("user.create.reply")
+  async logCreateUser(@Payload() message) {
+    console.log("THIS IS THE CREATE USER INPUT", message);
   }
 
-  // @Mutation(() => User)
-  // @MessagePattern('test')
+
+  // @Mutation(() => String)
+  // @MessagePattern('user.create')
   // async createUser(
   //   @Payload() message,
   //   // @Args('createUserInput') createUserInput: CreateUserInput,
   // ) {
   //   console.log('THIS IS THE CREATE USER INPUT', message);
+  //  // console.log('THIS IS THE CREATE USER INPUT', createUserInput);
   //   return "ASDASDASDSAD";
   //   //return await this.usersService.create(createUserInput);
   // }
-  //
+  // @EventPattern("user.create.reply")
+  // async logCreateUser(@Payload() message: CreateUserInput) {
+  //   console.log("THIS IS THE CREATE USER INPUT", message);
+  // }
+
   // @Mutation(() => User)
   // async updateUser(
   //   @Args('updateUserInput') updateUserInput: UpdateUserInput,

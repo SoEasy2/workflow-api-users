@@ -1,19 +1,24 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { AppService } from './app.service';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+import { from, Observable } from 'rxjs';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @MessagePattern('add.new.post')
-  addNewPost(@Payload() message): string {
-    console.log(message.value, 'ASDASDASDASDASDASDASD');
-    return 'asd';
-  }
-
-  @Get('hello/:name')
-  getHelloName(@Param('name') name: string): string {
-    return this.appService.getHelloName(name);
-  }
+  // @MessagePattern('user.create')
+  // async createUser(
+  //     @Payload() message,
+  //     // @Args('createUserInput') createUserInput: CreateUserInput,
+  // ) {
+  //   console.log('THIS IS THE CREATE USER INPUT', message);
+  //   // console.log('THIS IS THE CREATE USER INPUT', createUserInput);
+  //   return "ASDASDASDSAD";
+  //   //return await this.usersService.create(createUserInput);
+  // }
+  // @EventPattern("user.create.reply")
+  // async logCreateUser(@Payload() message) {
+  //   console.log("THIS IS THE CREATE USER INPUT", message);
+  // }
 }
