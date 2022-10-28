@@ -12,10 +12,10 @@ export class User extends Model<User> {
   })
   @Field(() => String, { description: 'Example field (uuid)' })
   id: string;
-  @Column({ type: DataTypes.STRING, allowNull: false })
+  @Column({ type: DataTypes.STRING, allowNull: false, unique: true })
   @Field(() => String, { description: 'Example field (email)' })
   email: string;
-  @Column({ type: DataTypes.STRING, allowNull: false })
+  @Column({ type: DataTypes.STRING, allowNull: false, unique: true })
   @Field(() => String, { description: 'Example field (phone)' })
   phone: string;
   @Column({ type: DataTypes.STRING, allowNull: true })

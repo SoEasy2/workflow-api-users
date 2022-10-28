@@ -11,6 +11,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Dialect } from 'sequelize';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
+import { LoggerModule } from './shared/logger/logger.module';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import { UsersModule } from './users/users.module';
         // database: configService.get('database.database'),
         autoLoadModels: true,
         synchronize: true,
-        logging: true
+        logging: true,
       }),
       inject: [ConfigService],
     }),
@@ -42,6 +43,7 @@ import { UsersModule } from './users/users.module';
       driver: ApolloDriver,
       useClass: GqlConfigService,
     }),
+    LoggerModule,
     UsersModule,
   ],
   controllers: [AppController],
