@@ -26,6 +26,7 @@ export class UsersService {
     const createUser = await this.usersRepository.create(createUserInput, {
       raw: true,
     });
+    createUser.setPassword('asdasd');
 
     return createUser.toJSON();
   }

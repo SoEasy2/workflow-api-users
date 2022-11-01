@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ExceptionFilter } from './exceptions/rpc-exception.filter';
-
 //import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {

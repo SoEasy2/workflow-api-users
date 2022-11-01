@@ -1,5 +1,5 @@
 import { Controller, UseFilters } from '@nestjs/common';
-import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+import { EventPattern, MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 import {
   TOPIC_USER_CREATE,
   TOPIC_USER_CREATE_REPLY,
