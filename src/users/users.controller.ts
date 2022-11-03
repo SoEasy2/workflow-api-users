@@ -1,5 +1,5 @@
 import { Controller, UseFilters } from '@nestjs/common';
-import { EventPattern, MessagePattern, Payload, RpcException } from '@nestjs/microservices';
+import { Ctx, EventPattern, MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 import {
   TOPIC_USER_CREATE,
   TOPIC_USER_CREATE_REPLY,
@@ -29,8 +29,11 @@ export class UsersController {
   @MessagePattern(TOPIC_USER_CREATE)
   async createUser(
     @Payload() message: IKafkaMessage<CreateUserInput>,
+    @Ctx() context: any,
   ): Promise<User> {
     try {
+      console.log("MESSAGE", message)
+      console.log("CONTEXT", JSON.stringify(context));
       this.appLogger.log(
         `[UsersController][${TOPIC_USER_CREATE}] -> [createUser]`,
       );
@@ -41,6 +44,7 @@ export class UsersController {
         err.stack,
         `[UsersController][${TOPIC_USER_CREATE}] -> [createUser]`,
       );
+      throw new RpcException(JSON.stringify(err));
     }
   }
   @EventPattern(TOPIC_USER_CREATE_REPLY)

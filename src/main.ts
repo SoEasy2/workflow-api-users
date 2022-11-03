@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ExceptionFilter } from './exceptions/rpc-exception.filter';
 //import { ConfigService } from '@nestjs/config';
+import { v4 as uuidv4 } from 'uuid';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -14,7 +15,7 @@ async function bootstrap() {
           brokers: ['kafka:9092'],
         },
         consumer: {
-          groupId: 'users-consumer',
+          groupId: `users-consumer-${uuidv4()}`,
           allowAutoTopicCreation: true,
         },
       },
