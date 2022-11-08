@@ -24,6 +24,9 @@ async function bootstrap() {
 
   app.useGlobalFilters(new ExceptionFilter());
 
-  app.listen();
+  await app.listen();
+
 }
-bootstrap();
+bootstrap().then(() => {
+    console.log('Users service is running');
+});
