@@ -29,11 +29,8 @@ export class UsersController {
   @MessagePattern(TOPIC_USER_CREATE)
   async createUser(
     @Payload() message: IKafkaMessage<CreateUserInput>,
-    @Ctx() context: any,
   ): Promise<User> {
     try {
-      console.log("MESSAGE", message)
-      console.log("CONTEXT", JSON.stringify(context));
       this.appLogger.log(
         `[UsersController][${TOPIC_USER_CREATE}] -> [createUser]`,
       );
