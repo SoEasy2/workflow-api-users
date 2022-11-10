@@ -2,7 +2,7 @@ import { Controller, UseFilters } from '@nestjs/common';
 import { Ctx, EventPattern, MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 import {
   TOPIC_USER_CREATE,
-  TOPIC_USER_CREATE_REPLY,
+  TOPIC_USER_CREATE_REPLY, TOPIC_USER_FIND_ONE, TOPIC_USER_FIND_ONE_REPLY,
   TOPIC_USER_REMOVE,
   TOPIC_USER_REMOVE_REPLY,
   TOPIC_USER_UPDATE,
@@ -94,6 +94,28 @@ export class UsersController {
   async logRemoveUser(): Promise<void> {
     this.appLogger.log(
       `[UsersController][${TOPIC_USER_REMOVE}][SEND] -> [removeUser]`,
+    );
+  }
+
+  @MessagePattern(TOPIC_USER_FIND_ONE)
+  async findById(@Payload() message: IKafkaMessage<string>): Promise<User> {
+    try {
+      this.appLogger.log(
+          `[UsersController][${TOPIC_USER_FIND_ONE}] -> [findById]`,
+      );
+      return await this.usersService.findById(message.value);
+    } catch (err) {
+      this.appLogger.error(
+          err,
+          err.stack,
+          `[UsersController][${TOPIC_USER_FIND_ONE}] -> [findById]`,
+      );
+    }
+  }
+  @EventPattern(TOPIC_USER_FIND_ONE_REPLY)
+  async logFindOneUser(): Promise<void> {
+    this.appLogger.log(
+        `[UsersController][${TOPIC_USER_REMOVE}][SEND] -> [removeUser]`,
     );
   }
 }

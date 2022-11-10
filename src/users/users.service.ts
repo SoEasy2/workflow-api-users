@@ -35,8 +35,9 @@ export class UsersService {
     return this.usersRepository.findAll();
   }
 
-  findOne(id: string): Promise<User> {
-    return this.usersRepository.findOne({ where: { id } });
+  async findById(id: string): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    return user.toJSON();
   }
 
   async update(updateUserInput: UpdateUserInput): Promise<User> {
@@ -49,7 +50,7 @@ export class UsersService {
     await this.usersRepository.update(updateUserInput, {
       where: { id: updateUserInput.id },
     });
-    return await this.findOne(user.id);
+    return await this.findById(user.id);
   }
 
   async remove(id: string): Promise<string> {
