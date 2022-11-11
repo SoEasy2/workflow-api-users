@@ -11,8 +11,14 @@ export class CreateUserInput implements Partial<User> {
   phone: string;
   @Field(() => String, { description: 'Example field (test)', nullable: true })
   password?: string;
-  @Field(() => String, { description: 'Example field (step registration)', nullable: false })
-  stepRegistration: StepRegistration
-  @Field(() => String, { description: 'Example field (date send code)', nullable: false })
+  @Field(() => String, {
+    description: 'Example field (step registration)',
+    nullable: false,
+  })
+  stepRegistration: StepRegistration;
+  @Field(() => String, {
+    description: 'Example field (date send code)',
+    nullable: false,
+  })
   sendCodeDate: Date;
 }

@@ -31,7 +31,11 @@ export class User extends Model<User> {
   @Field(() => String, { description: 'Example field (send code date)' })
   sendCodeDate: Date;
 
-  @Column({ type: DataTypes.STRING, allowNull: false, defaultValue: StepRegistration.REGISTRATION })
+  @Column({
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: StepRegistration.REGISTRATION,
+  })
   @Field(() => String, { description: 'Example field (current step)' })
   stepRegistration: StepRegistration;
 

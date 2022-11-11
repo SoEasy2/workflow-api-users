@@ -5,6 +5,7 @@ import { User } from './entities/user.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { RpcException } from '@nestjs/microservices';
 import { Op } from 'sequelize';
+import { CheckPasswordDto } from './dto/check-password-dto';
 
 @Injectable()
 export class UsersService {
@@ -38,6 +39,20 @@ export class UsersService {
   async findById(id: string): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { id } });
     return user.toJSON();
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { email } });
+    if (!user) {
+      throw new RpcException('User not found');
+    }
+    return user.toJSON();
+  }
+
+  async checkValidPassword(dto: CheckPasswordDto): Promise<boolean> {
+    const { email, password } = dto;
+    const user = await this.usersRepository.findOne({ where: { email } });
+    return user.validatePassword(password);
   }
 
   async update(updateUserInput: UpdateUserInput): Promise<User> {

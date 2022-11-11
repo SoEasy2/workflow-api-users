@@ -1,8 +1,6 @@
 import type { Config } from './config.interface';
 import { Dialect } from 'sequelize';
 
-
-
 const config: Config = {
   graphql: {
     playgroundEnabled: true,

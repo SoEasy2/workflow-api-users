@@ -1,8 +1,19 @@
 import { Controller, UseFilters } from '@nestjs/common';
-import { Ctx, EventPattern, MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 import {
+  EventPattern,
+  MessagePattern,
+  Payload,
+  RpcException,
+} from '@nestjs/microservices';
+import {
+  TOPIC_USER_CHECK_PASSWORD,
+  TOPIC_USER_CHECK_PASSWORD_REPLY,
   TOPIC_USER_CREATE,
-  TOPIC_USER_CREATE_REPLY, TOPIC_USER_FIND_ONE, TOPIC_USER_FIND_ONE_REPLY,
+  TOPIC_USER_CREATE_REPLY,
+  TOPIC_USER_FIND_BY_EMAIL,
+  TOPIC_USER_FIND_BY_EMAIL_REPLY,
+  TOPIC_USER_FIND_BY_ID,
+  TOPIC_USER_FIND_BY_ID_REPLY,
   TOPIC_USER_REMOVE,
   TOPIC_USER_REMOVE_REPLY,
   TOPIC_USER_UPDATE,
@@ -15,6 +26,7 @@ import { ExceptionFilter } from '../exceptions/rpc-exception.filter';
 import { IKafkaMessage } from '../common/interfaces/kafka-message.interface';
 import { AppLogger } from '../shared/logger/logger.service';
 import { UpdateUserInput } from './dto/update-user.input';
+import { CheckPasswordDto } from './dto/check-password-dto';
 
 @UseFilters(new ExceptionFilter())
 @Controller('users')
@@ -97,25 +109,68 @@ export class UsersController {
     );
   }
 
-  @MessagePattern(TOPIC_USER_FIND_ONE)
+  @MessagePattern(TOPIC_USER_FIND_BY_ID)
   async findById(@Payload() message: IKafkaMessage<string>): Promise<User> {
     try {
       this.appLogger.log(
-          `[UsersController][${TOPIC_USER_FIND_ONE}] -> [findById]`,
+        `[UsersController][${TOPIC_USER_FIND_BY_ID}] -> [findById]`,
       );
       return await this.usersService.findById(message.value);
     } catch (err) {
       this.appLogger.error(
-          err,
-          err.stack,
-          `[UsersController][${TOPIC_USER_FIND_ONE}] -> [findById]`,
+        err,
+        err.stack,
+        `[UsersController][${TOPIC_USER_FIND_BY_ID}] -> [findById]`,
       );
     }
   }
-  @EventPattern(TOPIC_USER_FIND_ONE_REPLY)
-  async logFindOneUser(): Promise<void> {
+  @EventPattern(TOPIC_USER_FIND_BY_ID_REPLY)
+  async logFindOById(): Promise<void> {
     this.appLogger.log(
-        `[UsersController][${TOPIC_USER_REMOVE}][SEND] -> [removeUser]`,
+      `[UsersController][${TOPIC_USER_REMOVE}][SEND] -> [removeUser]`,
+    );
+  }
+
+  @MessagePattern(TOPIC_USER_FIND_BY_EMAIL)
+  async findByEmail(@Payload() message: IKafkaMessage<string>): Promise<User> {
+    try {
+      this.appLogger.log(
+        `[UsersController][${TOPIC_USER_FIND_BY_EMAIL}] -> [findByEmail]`,
+      );
+      return await this.usersService.findByEmail(message.value);
+    } catch (err) {
+      this.appLogger.error(
+        err,
+        err.stack,
+        `[UsersController][${TOPIC_USER_FIND_BY_EMAIL}] -> [findByEmail]`,
+      );
+    }
+  }
+  @EventPattern(TOPIC_USER_FIND_BY_EMAIL_REPLY)
+  async logFindByEmail(): Promise<void> {
+    this.appLogger.log(
+      `[UsersController][${TOPIC_USER_FIND_BY_EMAIL}][SEND] -> [findByEmail]`,
+    );
+  }
+  @MessagePattern(TOPIC_USER_CHECK_PASSWORD)
+  async checkPassword(@Payload() message: IKafkaMessage<CheckPasswordDto>) {
+    try {
+      this.appLogger.log(
+        `[UsersController][${TOPIC_USER_CHECK_PASSWORD}] -> [checkPassword]`,
+      );
+      return await this.usersService.checkValidPassword(message.value);
+    } catch (err) {
+      this.appLogger.error(
+        err,
+        err.stack,
+        `[UsersController][${TOPIC_USER_CHECK_PASSWORD}] -> [checkPassword]`,
+      );
+    }
+  }
+  @EventPattern(TOPIC_USER_CHECK_PASSWORD_REPLY)
+  async logCheckPassword(): Promise<void> {
+    this.appLogger.log(
+      `[UsersController][${TOPIC_USER_CHECK_PASSWORD_REPLY}][SEND] -> [checkPassword]`,
     );
   }
 }
