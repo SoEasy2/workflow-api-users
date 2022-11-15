@@ -21,4 +21,9 @@ export class CreateUserInput implements Partial<User> {
     nullable: false,
   })
   sendCodeDate: Date;
+  @Field(() => String, {
+    description: 'Example field ( send code)',
+    nullable: false,
+  })
+  codeEmail: string;
 }

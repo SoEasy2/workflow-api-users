@@ -46,6 +46,7 @@ export class UsersController {
       this.appLogger.log(
         `[UsersController][${TOPIC_USER_CREATE}] -> [createUser]`,
       );
+      console.log('message', message.value);
       return await this.usersService.create(message.value);
     } catch (err) {
       this.appLogger.error(
