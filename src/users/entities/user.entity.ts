@@ -34,7 +34,7 @@ export class User extends Model<User> {
   @Column({
     type: DataTypes.STRING,
     allowNull: true,
-    defaultValue: null
+    defaultValue: null,
   })
   currentCompany?: string;
 
@@ -51,7 +51,7 @@ export class User extends Model<User> {
   updatedAt: Date;
 
   @Column({ type: DataTypes.STRING, allowNull: true, defaultValue: null })
-  username?: string
+  username?: string;
 
   async setPassword(password: string): Promise<void> {
     const saltOrRounds = 10;

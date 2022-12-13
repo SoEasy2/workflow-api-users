@@ -69,7 +69,7 @@ export class UsersController {
     @Payload() message: IKafkaMessage<UpdateUserInput>,
   ): Promise<User> {
     try {
-      console.log('update user input', message.value)
+      console.log('update user input', message.value);
       this.appLogger.log(
         `[UsersController][${TOPIC_USER_UPDATE}] -> [updateUser]`,
       );

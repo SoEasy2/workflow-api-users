@@ -28,9 +28,6 @@ export class UsersService {
       raw: true,
     });
     createUser.setPassword('asdasd');
-    const a = {
-
-    }
     return createUser.toJSON();
   }
 
