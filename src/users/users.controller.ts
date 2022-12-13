@@ -29,7 +29,7 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { CheckPasswordDto } from './dto/check-password-dto';
 
 @UseFilters(new ExceptionFilter())
-@Controller('users')
+@Controller('user')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -69,6 +69,7 @@ export class UsersController {
     @Payload() message: IKafkaMessage<UpdateUserInput>,
   ): Promise<User> {
     try {
+      console.log('update user input', message.value)
       this.appLogger.log(
         `[UsersController][${TOPIC_USER_UPDATE}] -> [updateUser]`,
       );

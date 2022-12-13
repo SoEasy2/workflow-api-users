@@ -1,34 +1,27 @@
 import { Column, Model, Table } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
-import { Field, ObjectType } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
 import { StepRegistration } from 'src/shared/users/enums/stepRegistration';
 
-@Table({ timestamps: true, freezeTableName: true, tableName: 'users' })
-@ObjectType()
+@Table({ timestamps: true, freezeTableName: true, tableName: 'user' })
 export class User extends Model<User> {
   @Column({
     primaryKey: true,
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   })
-  @Field(() => String, { description: 'Example field (uuid)' })
   id: string;
 
   @Column({ type: DataTypes.STRING, allowNull: false, unique: true })
-  @Field(() => String, { description: 'Example field (email)' })
   email: string;
 
   @Column({ type: DataTypes.STRING, allowNull: false, unique: true })
-  @Field(() => String, { description: 'Example field (phone)' })
   phone: string;
 
   @Column({ type: DataTypes.STRING, allowNull: true })
-  @Field(() => String, { description: 'Example field (code email)' })
   codeEmail: string;
 
   @Column({ type: DataTypes.DATE, allowNull: true })
-  @Field(() => String, { description: 'Example field (send code date)' })
   sendCodeDate: Date;
 
   @Column({
@@ -36,33 +29,29 @@ export class User extends Model<User> {
     allowNull: false,
     defaultValue: StepRegistration.REGISTRATION,
   })
-  @Field(() => String, { description: 'Example field (current step)' })
   stepRegistration: StepRegistration;
 
-  @Column({ type: DataTypes.STRING, allowNull: true })
-  @Field(() => String, {
-    description: 'Example field (password)',
-    nullable: true,
+  @Column({
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: null
   })
+  currentCompany?: string;
+
+  @Column({ type: DataTypes.STRING, allowNull: true, defaultValue: null })
   password?: string;
 
-  @Column({ type: DataTypes.STRING, allowNull: true })
-  @Field(() => String, { description: 'Example field (salt)' })
+  @Column({ type: DataTypes.STRING, allowNull: true, defaultValue: null })
   salt?: string;
 
-  @Column({ type: DataTypes.DATE, allowNull: true })
-  @Field(() => String, {
-    description: 'ISO date string',
-    nullable: true,
-  })
+  @Column({ type: DataTypes.DATE, allowNull: true, defaultValue: null })
   createdAt: Date;
 
-  @Column({ type: DataTypes.DATE, allowNull: true })
-  @Field(() => String, {
-    description: 'ISO date',
-    nullable: true,
-  })
+  @Column({ type: DataTypes.DATE, allowNull: true, defaultValue: null })
   updatedAt: Date;
+
+  @Column({ type: DataTypes.STRING, allowNull: true, defaultValue: null })
+  username?: string
 
   async setPassword(password: string): Promise<void> {
     const saltOrRounds = 10;
