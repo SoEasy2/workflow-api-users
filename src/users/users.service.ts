@@ -50,10 +50,7 @@ export class UsersService {
   async findByEmailOrPhone(login: string): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: {
-        [Op.or]: [
-          { email: login },
-          { phone: login },
-        ],
+        [Op.or]: [{ email: login }, { phone: login }],
       },
     });
     if (!user) throw new RpcException('User not found');
@@ -72,7 +69,7 @@ export class UsersService {
       where: { id: updateUserInput.id },
     });
     const userUpdate = await this.findById(user.id);
-    console.log('user update', userUpdate)
+    console.log('user update', userUpdate);
     return userUpdate;
   }
 

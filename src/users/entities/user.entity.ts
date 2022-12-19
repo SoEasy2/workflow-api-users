@@ -51,5 +51,4 @@ export class User extends Model<User> {
 
   @Column({ type: DataTypes.STRING, allowNull: true, defaultValue: null })
   username?: string;
-
 }

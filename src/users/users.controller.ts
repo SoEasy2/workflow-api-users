@@ -8,7 +8,9 @@ import {
 import {
   TOPIC_USER_CREATE,
   TOPIC_USER_CREATE_REPLY,
-  TOPIC_USER_FIND_BY_EMAIL, TOPIC_USER_FIND_BY_EMAIL_OR_PHONE, TOPIC_USER_FIND_BY_EMAIL_OR_PHONE_REPLY,
+  TOPIC_USER_FIND_BY_EMAIL,
+  TOPIC_USER_FIND_BY_EMAIL_OR_PHONE,
+  TOPIC_USER_FIND_BY_EMAIL_OR_PHONE_REPLY,
   TOPIC_USER_FIND_BY_EMAIL_REPLY,
   TOPIC_USER_FIND_BY_ID,
   TOPIC_USER_FIND_BY_ID_REPLY,
@@ -152,26 +154,24 @@ export class UsersController {
   }
 
   @MessagePattern(TOPIC_USER_FIND_BY_EMAIL_OR_PHONE)
-  async findByEmailOrPhone(
-      @Payload() message: IKafkaMessage<string>
-  ) {
+  async findByEmailOrPhone(@Payload() message: IKafkaMessage<string>) {
     try {
       this.appLogger.log(
-          `[UsersController][${TOPIC_USER_FIND_BY_EMAIL_OR_PHONE}] -> [findByEmailOrPhone]`,
+        `[UsersController][${TOPIC_USER_FIND_BY_EMAIL_OR_PHONE}] -> [findByEmailOrPhone]`,
       );
       return await this.usersService.findByEmailOrPhone(message.value);
     } catch (err) {
       this.appLogger.error(
-          err,
-          err.stack,
-          `[UsersController][${TOPIC_USER_FIND_BY_EMAIL_OR_PHONE}] -> [findByEmailOrPhone]`,
+        err,
+        err.stack,
+        `[UsersController][${TOPIC_USER_FIND_BY_EMAIL_OR_PHONE}] -> [findByEmailOrPhone]`,
       );
     }
   }
   @EventPattern(TOPIC_USER_FIND_BY_EMAIL_OR_PHONE_REPLY)
   async logFindByEmailOrPhone(): Promise<void> {
     this.appLogger.log(
-        `[UsersController][${TOPIC_USER_FIND_BY_EMAIL_OR_PHONE}][SEND] -> [findByEmailOrPhone]`,
+      `[UsersController][${TOPIC_USER_FIND_BY_EMAIL_OR_PHONE}][SEND] -> [findByEmailOrPhone]`,
     );
   }
 }

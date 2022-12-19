@@ -13,5 +13,6 @@ export const TOPIC_USER_FIND_BY_ID_REPLY = 'user.findById.reply';
 export const TOPIC_USER_FIND_BY_EMAIL = 'user.findByEmail';
 export const TOPIC_USER_FIND_BY_EMAIL_REPLY = 'user.findByEmail.reply';
 
-export const TOPIC_USER_FIND_BY_EMAIL_OR_PHONE = 'user.findByEmailOrPhone'
-export const TOPIC_USER_FIND_BY_EMAIL_OR_PHONE_REPLY = 'user.findByEmailOrPhone.reply'
+export const TOPIC_USER_FIND_BY_EMAIL_OR_PHONE = 'user.findByEmailOrPhone';
+export const TOPIC_USER_FIND_BY_EMAIL_OR_PHONE_REPLY =
+  'user.findByEmailOrPhone.reply';
