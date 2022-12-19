@@ -6,11 +6,9 @@ import {
   RpcException,
 } from '@nestjs/microservices';
 import {
-  TOPIC_USER_CHECK_PASSWORD,
-  TOPIC_USER_CHECK_PASSWORD_REPLY,
   TOPIC_USER_CREATE,
   TOPIC_USER_CREATE_REPLY,
-  TOPIC_USER_FIND_BY_EMAIL,
+  TOPIC_USER_FIND_BY_EMAIL, TOPIC_USER_FIND_BY_EMAIL_OR_PHONE, TOPIC_USER_FIND_BY_EMAIL_OR_PHONE_REPLY,
   TOPIC_USER_FIND_BY_EMAIL_REPLY,
   TOPIC_USER_FIND_BY_ID,
   TOPIC_USER_FIND_BY_ID_REPLY,
@@ -26,7 +24,6 @@ import { ExceptionFilter } from '../exceptions/rpc-exception.filter';
 import { IKafkaMessage } from '../common/interfaces/kafka-message.interface';
 import { AppLogger } from '../shared/logger/logger.service';
 import { UpdateUserInput } from './dto/update-user.input';
-import { CheckPasswordDto } from './dto/check-password-dto';
 
 @UseFilters(new ExceptionFilter())
 @Controller('user')
@@ -46,7 +43,6 @@ export class UsersController {
       this.appLogger.log(
         `[UsersController][${TOPIC_USER_CREATE}] -> [createUser]`,
       );
-      console.log('message', message.value);
       return await this.usersService.create(message.value);
     } catch (err) {
       this.appLogger.error(
@@ -154,25 +150,28 @@ export class UsersController {
       `[UsersController][${TOPIC_USER_FIND_BY_EMAIL}][SEND] -> [findByEmail]`,
     );
   }
-  @MessagePattern(TOPIC_USER_CHECK_PASSWORD)
-  async checkPassword(@Payload() message: IKafkaMessage<CheckPasswordDto>) {
+
+  @MessagePattern(TOPIC_USER_FIND_BY_EMAIL_OR_PHONE)
+  async findByEmailOrPhone(
+      @Payload() message: IKafkaMessage<string>
+  ) {
     try {
       this.appLogger.log(
-        `[UsersController][${TOPIC_USER_CHECK_PASSWORD}] -> [checkPassword]`,
+          `[UsersController][${TOPIC_USER_FIND_BY_EMAIL_OR_PHONE}] -> [findByEmailOrPhone]`,
       );
-      return await this.usersService.checkValidPassword(message.value);
+      return await this.usersService.findByEmailOrPhone(message.value);
     } catch (err) {
       this.appLogger.error(
-        err,
-        err.stack,
-        `[UsersController][${TOPIC_USER_CHECK_PASSWORD}] -> [checkPassword]`,
+          err,
+          err.stack,
+          `[UsersController][${TOPIC_USER_FIND_BY_EMAIL_OR_PHONE}] -> [findByEmailOrPhone]`,
       );
     }
   }
-  @EventPattern(TOPIC_USER_CHECK_PASSWORD_REPLY)
-  async logCheckPassword(): Promise<void> {
+  @EventPattern(TOPIC_USER_FIND_BY_EMAIL_OR_PHONE_REPLY)
+  async logFindByEmailOrPhone(): Promise<void> {
     this.appLogger.log(
-      `[UsersController][${TOPIC_USER_CHECK_PASSWORD_REPLY}][SEND] -> [checkPassword]`,
+        `[UsersController][${TOPIC_USER_FIND_BY_EMAIL_OR_PHONE}][SEND] -> [findByEmailOrPhone]`,
     );
   }
 }
