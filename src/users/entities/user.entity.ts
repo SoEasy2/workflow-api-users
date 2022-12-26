@@ -1,6 +1,8 @@
 import { Column, Model, Table } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 import { StepRegistration } from 'src/shared/users/enums/stepRegistration';
+import { TypeRegistration } from '../../shared/users/enums/typeRegistration';
+import { StepConnect } from '../../shared/users/enums/stepConnect';
 
 @Table({ timestamps: true, freezeTableName: true, tableName: 'user' })
 export class User extends Model<User> {
@@ -28,7 +30,7 @@ export class User extends Model<User> {
     allowNull: false,
     defaultValue: StepRegistration.REGISTRATION,
   })
-  stepRegistration: StepRegistration;
+  stepRegistration: StepRegistration | StepConnect;
 
   @Column({
     type: DataTypes.STRING,
@@ -36,6 +38,15 @@ export class User extends Model<User> {
     defaultValue: null,
   })
   currentCompany?: string;
+
+  @Column({
+    type: DataTypes.ENUM(...Object.values(TypeRegistration)),
+    defaultValue: TypeRegistration.REGISTRATION_DEFAULT,
+    validate: {
+      isIn: [Object.values(TypeRegistration)]
+    },
+  })
+  typeRegistration: TypeRegistration
 
   @Column({ type: DataTypes.STRING, allowNull: true, defaultValue: null })
   password?: string;
