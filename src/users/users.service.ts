@@ -5,7 +5,6 @@ import { User } from './entities/user.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { RpcException } from '@nestjs/microservices';
 import { Op } from 'sequelize';
-import { CheckPasswordDto } from './dto/check-password-dto';
 
 @Injectable()
 export class UsersService {
