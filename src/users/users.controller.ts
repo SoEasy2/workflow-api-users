@@ -173,5 +173,5 @@ export class UsersController {
     this.appLogger.log(
       `[UsersController][${TOPIC_USER_FIND_BY_EMAIL_OR_PHONE}][SEND] -> [findByEmailOrPhone]`,
     );
-  };
+  }
 }

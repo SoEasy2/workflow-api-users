@@ -43,10 +43,10 @@ export class User extends Model<User> {
     type: DataTypes.ENUM(...Object.values(TypeRegistration)),
     defaultValue: TypeRegistration.REGISTRATION_DEFAULT,
     validate: {
-      isIn: [Object.values(TypeRegistration)]
+      isIn: [Object.values(TypeRegistration)],
     },
   })
-  typeRegistration: TypeRegistration
+  typeRegistration: TypeRegistration;
 
   @Column({ type: DataTypes.STRING, allowNull: true, defaultValue: null })
   password?: string;
