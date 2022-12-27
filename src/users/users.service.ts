@@ -68,7 +68,6 @@ export class UsersService {
       where: { id: updateUserInput.id },
     });
     const userUpdate = await this.findById(user.id);
-    console.log('user update', userUpdate);
     return userUpdate;
   }
 
