@@ -26,8 +26,6 @@ export class UsersService {
     const createUser = await this.usersRepository.create(createUserInput, {
       raw: true,
     });
-    createUser.setPassword('asdasd');
-
     return createUser.toJSON();
   }
 
@@ -35,21 +33,42 @@ export class UsersService {
     return this.usersRepository.findAll();
   }
 
-  findOne(id: string): Promise<User> {
-    return this.usersRepository.findOne({ where: { id } });
+  async findById(id: string): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    return user.toJSON();
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { email } });
+    if (!user) {
+      throw new RpcException('User not found');
+    }
+    return user.toJSON();
+  }
+
+  async findByEmailOrPhone(login: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: {
+        [Op.or]: [{ email: login }, { phone: login }],
+      },
+    });
+    if (!user) throw new RpcException('User not found');
+    return user.toJSON();
   }
 
   async update(updateUserInput: UpdateUserInput): Promise<User> {
+    const { id, ...rest } = updateUserInput;
     const user = await this.usersRepository.findOne({
-      where: { id: updateUserInput.id },
+      where: { id },
     });
     if (!user) {
       throw new RpcException('User not found');
     }
-    await this.usersRepository.update(updateUserInput, {
+    await this.usersRepository.update(rest, {
       where: { id: updateUserInput.id },
     });
-    return await this.findOne(user.id);
+    const userUpdate = await this.findById(user.id);
+    return userUpdate;
   }
 
   async remove(id: string): Promise<string> {

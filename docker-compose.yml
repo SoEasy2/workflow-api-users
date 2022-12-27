@@ -8,11 +8,11 @@ services:
     networks:
       - app-network
     environment:
-      DATABASE_HOST: workflow-db-users
+      DATABASE_HOST: workflow-db-user
       DATABASE_PORT: 5432
       DATABASE_USERNAME: admin
       DATABASE_PASSWORD: root
-      DATABASE_NAME: users
+      DATABASE_NAME: user
     command: bash -c "npm install -f && npm start"
     depends_on:
       - workflow-db-users
@@ -23,7 +23,7 @@ services:
   workflow-db-users:
     image: kartoza/postgis:14-3.1
     volumes:
-      - ../workflow-db-users:/var/lib/postgresql
+      - ../workflow-db-user:/var/lib/postgresql
       - ../workflow-db-users_data:/var/lib/postgresql/data
     ports:
       - 25432:5432
@@ -31,7 +31,7 @@ services:
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASS=root
-      - POSTGRES_DB=users
+      - POSTGRES_DB=user
       - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
     networks:
       - app-network
@@ -44,7 +44,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
-      - ../workflow-pgadmin-users:/var/lib/pgadmin
+      - ../workflow-pgadmin-user:/var/lib/pgadmin
     ports:
       - "5050:80"
     networks:
