@@ -1,9 +1,10 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import { Column, HasOne, Model, Table } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 import { StepRegistration } from 'src/shared/users/enums/stepRegistration';
 import { TypeRegistration } from '../../shared/users/enums/typeRegistration';
 import { StepConnect } from '../../shared/users/enums/stepConnect';
 import { Languages } from '../../shared/users/enums/languages';
+import { Permission } from '../../permissions/entities/permission.entity';
 
 @Table({ timestamps: true, freezeTableName: true, tableName: 'user' })
 export class User extends Model<User> {
@@ -48,6 +49,9 @@ export class User extends Model<User> {
     },
   })
   typeRegistration: TypeRegistration;
+
+  @HasOne(() => Permission)
+  permission: Permission | null;
 
   @Column({
     type: DataTypes.ENUM(...Object.values(Languages)),

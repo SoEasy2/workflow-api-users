@@ -12,6 +12,8 @@ import { Dialect } from 'sequelize';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { LoggerModule } from './shared/logger/logger.module';
+import { PermissionsModule } from './permissions/permissions.module';
+import { Permission } from './permissions/entities/permission.entity';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { LoggerModule } from './shared/logger/logger.module';
         username: process.env.DATABASE_USERNAME,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
-        models: [User],
+        models: [User, Permission],
 
         // dialect: configService.get('database.dialect'),
         // host: configService.get('database.host'),
@@ -45,6 +47,7 @@ import { LoggerModule } from './shared/logger/logger.module';
     }),
     LoggerModule,
     UsersModule,
+    PermissionsModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppResolver],
