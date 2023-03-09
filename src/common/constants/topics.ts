@@ -16,3 +16,9 @@ export const TOPIC_USER_FIND_BY_EMAIL_REPLY = 'user.findByEmail.reply';
 export const TOPIC_USER_FIND_BY_EMAIL_OR_PHONE = 'user.findByEmailOrPhone';
 export const TOPIC_USER_FIND_BY_EMAIL_OR_PHONE_REPLY =
   'user.findByEmailOrPhone.reply';
+
+export const TOPIC_PERMISSIONS_CREATE = 'permissions.create';
+export const TOPIC_PERMISSIONS_CREATE_REPLY = 'permissions.create.reply';
+
+export const TOPIC_PERMISSIONS_UPDATE = 'permissions.update';
+export const TOPIC_PERMISSIONS_UPDATE_REPLY = 'permissions.update.reply';
