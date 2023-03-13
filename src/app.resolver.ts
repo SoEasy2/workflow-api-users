@@ -11,3 +11,4 @@ export class AppResolver {
     return `Hello ${name}!`;
   }
 }
+
